@@ -7,13 +7,17 @@ export async function corsMiddleware(c: Context, next: Next) {
   // Allow requests from Cloudflare Pages and localhost
   const allowedOrigins = [
     'https://find-and-locate.pages.dev',
+    'https://find-and-locate-web.pages.dev',
+    'https://find.kasidit-wans.com',
     'https://hakhong.oppo-oway.com',
     'http://localhost:3000',
     'http://localhost:5173',
   ];
 
   const origin = c.req.header('Origin') || '';
-  const isAllowed = allowedOrigins.includes(origin) || origin.endsWith('.pages.dev');
+  const isAllowed = allowedOrigins.includes(origin)
+    || origin.endsWith('.pages.dev')
+    || origin.endsWith('.kasidit-wans.com');
 
   if (isAllowed) {
     c.header('Access-Control-Allow-Origin', origin);
