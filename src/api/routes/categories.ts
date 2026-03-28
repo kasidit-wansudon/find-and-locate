@@ -15,7 +15,7 @@ categories.get('/', async (c) => {
   } catch { /* miss */ }
 
   const { results } = await c.env.DB.prepare(`
-    SELECT * FROM categories ORDER BY sort_order ASC, name_th ASC
+    SELECT * FROM categories ORDER BY name ASC
   `).all();
 
   // Cache for 1 hour
@@ -27,15 +27,15 @@ categories.get('/', async (c) => {
 });
 
 /**
- * GET /api/categories/:slug
+ * GET /api/categories/:id
  * Category detail with product count
  */
-categories.get('/:slug', async (c) => {
-  const slug = c.req.param('slug');
+categories.get('/:id', async (c) => {
+  const id = c.req.param('id');
 
   const category = await c.env.DB.prepare(
-    'SELECT * FROM categories WHERE slug = ?1'
-  ).bind(slug).first();
+    'SELECT * FROM categories WHERE id = ?1'
+  ).bind(id).first();
 
   if (!category) {
     return c.json({ success: false, error: 'Category not found' }, 404);
