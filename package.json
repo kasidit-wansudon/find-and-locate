@@ -1,0 +1,21 @@
+{
+  "name": "find-and-locate",
+  "version": "0.1.0",
+  "description": "Find & Locate - Product Finder API for Bangkok shops",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "db:migrate": "wrangler d1 execute superapp --file=./migrations/001_init.sql",
+    "db:migrate:local": "wrangler d1 execute superapp --local --file=./migrations/001_init.sql",
+    "seed": "wrangler d1 execute superapp --file=./migrations/002_seed.sql"
+  },
+  "dependencies": {
+    "hono": "^4.4.0"
+  },
+  "devDependencies": {
+    "wrangler": "^3.60.0",
+    "@cloudflare/workers-types": "^4.20240620.0",
+    "typescript": "^5.5.0"
+  }
+}

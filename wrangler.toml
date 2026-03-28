@@ -1,0 +1,35 @@
+name = "find-and-locate"
+main = "src/index.ts"
+compatibility_date = "2024-06-01"
+
+# ─── D1 Database (superapp) ───
+[[d1_databases]]
+binding = "DB"
+database_name = "superapp"
+database_id = "f3c8cd8d-e5d0-405a-9391-8ae0e859519f"
+
+# ─── KV Namespaces ───
+[[kv_namespaces]]
+binding = "CACHE"
+id = "63acb91f09e144aa845064dcb7fd2e47"
+
+[[kv_namespaces]]
+binding = "SESSIONS"
+id = "70c337e3ddc148b5a0b55d58055ff252"
+
+# ─── R2 Bucket ───
+[[r2_buckets]]
+binding = "MEDIA"
+bucket_name = "superapp-media"
+
+# ─── Environment Variables ───
+[vars]
+APP_NAME = "Find & Locate"
+APP_VERSION = "0.1.0"
+DEFAULT_CITY = "Bangkok"
+MAX_SEARCH_RADIUS_KM = "50"
+RESULTS_PER_PAGE = "20"
+
+# ─── Production ───
+[env.production]
+name = "find-and-locate"

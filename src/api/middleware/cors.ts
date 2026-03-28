@@ -1,0 +1,31 @@
+import { Context, Next } from 'hono';
+
+/**
+ * CORS middleware — allow frontend origins
+ */
+export async function corsMiddleware(c: Context, next: Next) {
+  // Allow requests from Cloudflare Pages and localhost
+  const allowedOrigins = [
+    'https://find-and-locate.pages.dev',
+    'https://hakhong.oppo-oway.com',
+    'http://localhost:3000',
+    'http://localhost:5173',
+  ];
+
+  const origin = c.req.header('Origin') || '';
+  const isAllowed = allowedOrigins.includes(origin) || origin.endsWith('.pages.dev');
+
+  if (isAllowed) {
+    c.header('Access-Control-Allow-Origin', origin);
+  }
+
+  c.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+  c.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  c.header('Access-Control-Max-Age', '86400');
+
+  if (c.req.method === 'OPTIONS') {
+    return c.text('', 204);
+  }
+
+  await next();
+}
