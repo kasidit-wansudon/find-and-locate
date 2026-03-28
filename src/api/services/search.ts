@@ -124,12 +124,7 @@ export async function searchProducts(
       : 0,
   }));
 
-  // Filter by radius
-  if (params.lat && params.lng && params.radius_km) {
-    results = results.filter(r => r.distance_km <= params.radius_km!);
-  }
-
-  // Sort
+  // Sort (no radius filter — show all results, just sort by distance)
   if (params.sort === 'distance' && params.lat && params.lng) {
     results.sort((a, b) => a.distance_km - b.distance_km);
   } else if (params.sort === 'price') {
