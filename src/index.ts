@@ -6,6 +6,7 @@ import searchRoutes from './api/routes/search';
 import shopRoutes from './api/routes/shops';
 import categoryRoutes from './api/routes/categories';
 import claimRoutes from './api/routes/claims';
+import adminRoutes from './api/routes/admin';
 
 const app = new Hono<{ Bindings: Env }>();
 
@@ -32,6 +33,7 @@ app.route('/api/search', searchRoutes);
 app.route('/api/shops', shopRoutes);
 app.route('/api/categories', categoryRoutes);
 app.route('/api/claims', claimRoutes);
+app.route('/api/admin', adminRoutes);
 
 // ─── API Info ───
 app.get('/api', (c) => {
