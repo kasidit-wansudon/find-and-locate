@@ -1,8 +1,8 @@
 import { Hono } from 'hono';
 import type { Env } from '../../types/env';
-import { adminAuth, signJWT, verifyPassword, hashPassword } from '../middleware/adminAuth';
+import { adminAuth, signJWT, verifyPassword, hashPassword, type AdminVariables } from '../middleware/adminAuth';
 
-const admin = new Hono<{ Bindings: Env }>();
+const admin = new Hono<{ Bindings: Env; Variables: AdminVariables }>();
 
 // ─── POST /api/admin/login ───────────────────────────────────────────────────
 admin.post('/login', async (c) => {
@@ -37,7 +37,7 @@ admin.post('/login', async (c) => {
 
 // ─── POST /api/admin/change-password ────────────────────────────────────────
 admin.post('/change-password', adminAuth, async (c) => {
-  const adminId = (c as any).get('adminId');
+  const adminId = c.get('adminId');
   const body = await c.req.json<{ current_password: string; new_password: string }>();
 
   const user = await c.env.DB.prepare('SELECT * FROM admin_users WHERE id = ?1').bind(adminId).first<any>();
@@ -55,7 +55,7 @@ admin.post('/change-password', adminAuth, async (c) => {
 
 // ─── GET /api/admin/me ───────────────────────────────────────────────────────
 admin.get('/me', adminAuth, async (c) => {
-  const adminId = (c as any).get('adminId');
+  const adminId = c.get('adminId');
   const user = await c.env.DB.prepare(
     'SELECT id, email, name, role, created_at, last_login FROM admin_users WHERE id = ?1'
   ).bind(adminId).first();

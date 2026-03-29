@@ -1,11 +1,19 @@
 import { Context, Next } from 'hono';
 import type { Env } from '../../types/env';
 
+export type AdminVariables = {
+  adminId: string;
+  adminRole: string;
+};
+
 /**
  * Verify JWT token for admin routes
  * Uses Web Crypto API (available in Cloudflare Workers)
  */
-export async function adminAuth(c: Context<{ Bindings: Env }>, next: Next) {
+export async function adminAuth(
+  c: Context<{ Bindings: Env; Variables: AdminVariables }>,
+  next: Next
+) {
   const authHeader = c.req.header('Authorization');
   if (!authHeader?.startsWith('Bearer ')) {
     return c.json({ success: false, error: 'Unauthorized' }, 401);
@@ -19,9 +27,8 @@ export async function adminAuth(c: Context<{ Bindings: Env }>, next: Next) {
     if (!payload) {
       return c.json({ success: false, error: 'Invalid token' }, 401);
     }
-    // Attach admin info to context
-    c.set('adminId' as any, payload.sub);
-    c.set('adminRole' as any, payload.role);
+    c.set('adminId', String(payload.sub ?? ''));
+    c.set('adminRole', String(payload.role ?? 'admin'));
     await next();
   } catch {
     return c.json({ success: false, error: 'Invalid token' }, 401);
